@@ -1,6 +1,5 @@
 const app = require("./config/express");
 const authRouter = require("./app/routers/authRouter");
-const projectRouter = require("./app/routers/projectRouter");
 const chatRouter = require("./app/routers/chatRouter");
 const userRouter = require("./app/routers/userRouter");
 const upload = require("./modules/upload");
@@ -22,4 +21,3 @@ app.post("/upload", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
-app.use("/api/project", projectRouter);

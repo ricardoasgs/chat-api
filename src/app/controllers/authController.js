@@ -48,7 +48,7 @@ exports.signin = async function(req, res) {
 
   user.password = undefined;
 
-  res.send({
+  return res.send({
     user,
     token: generateToken({ id: user.id })
   });

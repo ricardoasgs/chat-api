@@ -1,4 +1,4 @@
-const chatController = require("../controllers/chatControllerSocket");
+const chatController = require("../app/controllers/chatControllerSocket");
 
 module.exports = function(io) {
   // Set socket.io listeners.
