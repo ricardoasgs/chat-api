@@ -5,16 +5,14 @@ module.exports = function(io) {
   io.on("connection", socket => {
     console.log("a user connected");
 
-    socket.on("getChats", userId => {
-      const chats = chatController.getChats(userId);
+    socket.on("getChats", async userId => {
+      const chats = await chatController.getChats(userId);
 
-      socket.emit("chats", {
-        chats
-      });
+      socket.emit("chats", chats);
 
       //socket.join em todas as salas(id)?
       for (chat in chats) {
-        socket.join(chat);
+        socket.join(chat._id);
       }
     });
 

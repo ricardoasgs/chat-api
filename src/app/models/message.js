@@ -14,6 +14,10 @@ const MessageSchema = new mongoose.Schema({
     ref: "Chat",
     require: true
   },
+  visualized: {
+    type: Boolean,
+    default: false
+  },
   createdAt: {
     type: Date,
     default: Date.now,
