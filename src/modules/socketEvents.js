@@ -3,29 +3,36 @@ const chatController = require("../app/controllers/chatControllerSocket");
 module.exports = function(io) {
   // Set socket.io listeners.
   io.on("connection", socket => {
-    console.log("a user connected");
+    socket.join("general");
 
     socket.on("getChats", async userId => {
       const chats = await chatController.getChats(userId);
 
-      socket.emit("chats", chats);
-
-      //socket.join em todas as salas(id)?
-      for (chat in chats) {
-        socket.join(chat._id);
+      for (let chat of chats) {
       }
+      socket.emit("chats", chats);
     });
 
-    socket.on("newMessage", (author, user, messages) => {
-      const message = chatController.sendMessage(author, user, messages);
+    socket.on("joinChats", chat => {
+      //console.log(chat);
+      socket.join(chat._id, function() {
+        console.log(socket.rooms);
+        io.to(chat._id).emit("newMessage", "3");
+      });
+    });
 
-      io.in(message.conversationId).emit("message created", message.messages);
+    socket.on("newMessage", async (author, user, messages) => {
+      let rooms = Object.keys(socket.rooms);
+      //console.log(rooms);
+      const message = await chatController.sendMessage(author, user, messages);
+      console.log(message);
+      io.to(message.conversationId).emit("newMessage", message);
     });
 
     socket.on("createChat", (author, user, messages) => {
       const message = chatController.sendMessage(author, user, messages);
 
-      io.in(message.conversationId).emit("message created", message.messages);
+      io.sockets.in(message.conversationId).emit("newMessage", message);
     });
   });
 };

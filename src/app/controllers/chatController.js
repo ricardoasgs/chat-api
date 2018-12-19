@@ -102,7 +102,6 @@ exports.sendMessage = async function(req, res) {
         .status(400)
         .send({ error: "Error creating new message, chat doesnt exists" });
     }
-
     return res.status(200).send({ message: "Conversation updated!" });
   } catch (err) {
     return res.status(400).send({ error: "Error creating new message" });

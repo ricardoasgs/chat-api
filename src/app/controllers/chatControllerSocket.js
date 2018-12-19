@@ -70,10 +70,9 @@ exports.sendMessage = async function(author, user, messages) {
     const users = [author, user];
     const users2 = [user, author];
 
-    const chat = await Chat.findOne({ users: users, users: users2 }).populate([
-      "users",
-      "messages"
-    ]);
+    const chat = await Chat.findOne({
+      $or: [{ users }, { users: users2 }]
+    }).populate(["users", "messages"]);
 
     if (chat) {
       const message = await Message.create({
@@ -81,17 +80,20 @@ exports.sendMessage = async function(author, user, messages) {
         userId: author,
         conversationId: chat._id
       });
+      if (message) {
+        chat.messages.push(message._id);
 
-      chat.messages.push(message._id);
-
-      await chat.save();
+        await chat.save();
+        return message;
+      } else {
+        return { error: "Error creating new message" };
+      }
     } else {
       return { error: "Error creating new message, chat doesnt exists" };
       //create(author, user, messages);
     }
-
-    return message;
   } catch (err) {
+    console.log(err);
     return { error: "Error creating new message" };
   }
 };
