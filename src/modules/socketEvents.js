@@ -3,7 +3,7 @@ const chatController = require("../app/controllers/chatControllerSocket");
 module.exports = function(io) {
   // Set socket.io listeners.
   io.on("connection", socket => {
-    console.log("Conectado!!!");
+    //console.log("Conectado!!!");
     socket.join("general");
 
     socket.on("getChats", async userId => {

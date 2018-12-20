@@ -5,7 +5,9 @@ const Message = require("../models/message");
 //GET ALL CHATS THAT YOU PARTICIPATE
 exports.getChats = async function(users) {
   try {
-    const chats = await Chat.find({ users }).populate(["users", "messages"]);
+    const chats = await Chat.find({ users })
+      .sort("-updatedAt")
+      .populate(["users", "messages"]);
 
     if (!chats) {
       return { error: "Error loading chat..." };
@@ -82,6 +84,7 @@ exports.sendMessage = async function(author, user, messages) {
       });
       if (message) {
         chat.messages.push(message._id);
+        chat.updatedAt = Date.now();
 
         await chat.save();
         return message;
