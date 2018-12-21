@@ -9,19 +9,12 @@ module.exports = function(io) {
     socket.on("getChats", async userId => {
       const chats = await chatController.getChats(userId);
 
-      // for (let chat of chats) {
-      //   socket.join(chat._id, function() {
-      //     io.to(chat._id).emit("newMessage", "Connectado ao socket");
-      //   });
-      // }
-      // console.log(socket.rooms);
       socket.emit("chats", chats);
     });
 
     socket.on("joinChats", chat => {
-      //console.log(chat);
       socket.join(chat._id, function() {
-        io.to(chat._id).emit("newMessage", "Connectado ao socket");
+        //io.to(chat._id).emit("newMessage", "Connectado ao socket");
       });
       console.log(socket.rooms);
     });
