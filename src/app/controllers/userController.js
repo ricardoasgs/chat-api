@@ -8,7 +8,7 @@ exports.getContacts = async function(req, res) {
   try {
     const user = await User.findById(_id).populate("contacts");
 
-    if (!user) return res.status(400).send({ error: "User don`t exists" });
+    if (!user) return res.status(400).send({ error: "User doesnt exists" });
 
     const contacts = user.contacts;
 
@@ -20,12 +20,13 @@ exports.getContacts = async function(req, res) {
   }
 };
 
-// buscar contatos
+// cadastrar contatos
 exports.newContact = async function(req, res) {
   try {
+    //console.log(req.body);
     const { _id, email, name } = req.body;
 
-    const user = await User.findById(_id).populate("contacts");
+    const user = await User.findById(_id);
 
     if (user) {
       const contact = await Contact.create({
@@ -33,9 +34,10 @@ exports.newContact = async function(req, res) {
         email
       });
 
-      user.contacts.push(contact._id);
+      const newContacts = user.contacts;
+      newContacts.push(contact._id);
 
-      await user.save();
+      await user.updateOne({ $set: { contacts: newContacts } });
     } else {
       return res
         .status(400)
@@ -44,6 +46,7 @@ exports.newContact = async function(req, res) {
 
     return res.status(200).send({ message: "Contacts updated!" });
   } catch (err) {
+    //console.log(err);
     return res.status(400).send({ error: "Error creating new Contact" });
   }
 };
