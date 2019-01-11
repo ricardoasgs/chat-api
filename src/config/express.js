@@ -5,6 +5,7 @@ const cors = require("cors");
 const socketEvents = require("../modules/socketEvents");
 const app = express();
 
+app.use(express.static(__dirname + "/"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
