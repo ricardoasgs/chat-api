@@ -10,7 +10,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(cors());
-app.use(express.static("./public"));
 
 server = app.listen(3003 || process.env.PORT);
 
