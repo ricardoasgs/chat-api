@@ -11,7 +11,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.static("./public"));
 
-server = app.listen(3003);
+server = app.listen(3003 || process.env.PORT);
 
 const io = require("socket.io").listen(server);
 
